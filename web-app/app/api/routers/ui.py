@@ -83,7 +83,7 @@ def view_data_table(request: Request, db: Session = Depends(get_db)):
     """Renders the page to view all student data records."""
     
     # Fetch data using the CRUD function
-    students = crud_student.get_students(db, limit=50) # Limit to 50 records for display
+    students = crud_student.get_students(db, limit=500) # Limit to 50 records for display
     
     return templates.TemplateResponse(
         "pages/student_data_table.html", 
