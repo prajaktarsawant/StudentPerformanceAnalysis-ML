@@ -8,12 +8,17 @@ on:
 jobs:
   deploy:
     runs-on: ubuntu-latest
+    
+    # 💥 SECURITY FIX: Add the permissions block here
+    permissions:
+      contents: read
+      
     steps:
       - name: Checkout Code 🛎️
+        # This step needs 'contents: read' to fetch the code
         uses: actions/checkout@v4
 
       - name: Deploy via SSH 🚀
-        # This action uses your stored SSH Private Key to connect to the server
         uses: appleboy/ssh-action@v1.0.3
         with:
           host: ${{ secrets.REMOTE_HOST }}
@@ -21,22 +26,13 @@ jobs:
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           script: |
             # --- Deployment Script on your Linux Server ---
-
-            # 1. Navigate to the project directory (CHANGE THIS PATH!)
             cd /var/www/student_performance_analysis/live
-
-            # 2. Pull the latest code changes
             git pull origin main
-
-            # 3. Reinstall dependencies (optional, but good practice)
-            # If you use a virtual environment, activate it first:
+            
             cd /var/www/student_performance_analysis/live/web-app
             source venv/bin/activate
             pip install -r requirements.txt
-
-            # 4. Restart your application service to load the new code
-            # This is the CRITICAL step. Replace 'my-python-app.service' 
-            # with the actual name of your systemd service.
+            
             sudo systemctl daemon-reload
             sudo systemctl restart student_performance_analysis.service
             sudo nginx -t
