@@ -1,0 +1,44 @@
+{% extends "base_invitee.html" %}
+
+{% block title %}
+    Submission Status | Student Data Entry
+{% endblock %}
+
+{% block content %}
+    <div class="row justify-content-center">
+        <div class="col-lg-6">
+            
+            {% if success %}
+                <div class="card text-center shadow-lg border-success border-3">
+                    <div class="card-body p-5">
+                        <i class="bi bi-check-circle display-1 text-success mb-4"></i>
+                        <h2 class="card-title text-success mb-3">Data Submitted Successfully!</h2>
+                        <p class="lead">
+                            Thank you for completing the student data entry form. Your information has been securely logged.
+                        </p>
+                        <hr class="my-4">
+                        <p class="text-muted small">You may now close this browser window.</p>
+                    </div>
+                </div>
+            {% else %}
+                <div class="card text-center shadow-lg border-danger border-3">
+                    <div class="card-body p-5">
+                        <i class="bi bi-x-octagon display-1 text-danger mb-4"></i>
+                        <h2 class="card-title text-danger mb-3">Submission Failed</h2>
+                        <p class="lead">
+                            We were unable to process your data submission due to an error.
+                        </p>
+                        <p class="text-muted">
+                            This typically happens if a required field was missed, or there was a database issue.
+                        </p>
+                        <hr class="my-4">
+                        <a href="{{ url_for('invitee_add_form') }}" class="btn btn-danger">
+                            <i class="bi bi-arrow-clockwise me-2"></i>Try Submitting Again
+                        </a>
+                    </div>
+                </div>
+            {% endif %}
+            
+        </div>
+    </div>
+{% endblock %}

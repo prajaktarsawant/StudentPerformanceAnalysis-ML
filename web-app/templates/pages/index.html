@@ -1,0 +1,203 @@
+{% extends "base.html" %}
+
+{% block title %}
+    Dashboard | Data Overview
+{% endblock %}
+
+{% block content %}
+    <hr class="mb-5">
+
+    <h2 class="h5 mb-4 text-secondary">Key Data Metrics</h2>
+    <div class="row g-4 mb-5">
+        
+        <div class="col-md-4">
+            <div class="card shadow-sm h-100 border-0">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center mb-2">
+                        <h6 class="text-primary fw-bold mb-0 small text-uppercase">Completion Rate</h6>
+                        <i class="bi bi-check-circle text-primary fs-4"></i>
+                    </div>
+                    <h1 class="display-4 fw-bold mb-0 text-dark">{{ metrics.completion_rate }}%</h1>
+                    <p class="text-muted small">Required fields filled.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="card shadow-sm h-100 border-0">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center mb-2">
+                        <h6 class="text-dark fw-bold mb-0 small text-uppercase">Total Records</h6>
+                        <i class="bi bi-database text-dark fs-4"></i>
+                    </div>
+                    <h1 class="display-4 fw-bold mb-0 text-dark">{{ metrics.total_records }}</h1>
+                    <p class="text-muted small">Total database entries collected.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="card shadow-sm h-100 border-0">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center mb-2">
+                        <h6 class="text-danger fw-bold mb-0 small text-uppercase">Missing Data Count</h6>
+                        <i class="bi bi-exclamation-triangle text-danger fs-4"></i>
+                    </div>
+                    <h1 class="display-4 fw-bold mb-0 text-danger">{{ metrics.missing_values }}</h1>
+                    <p class="text-muted small">Total required fields left empty.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <h2 class="h5 mb-4 text-secondary">Data Distributions</h2>
+    <div class="row g-4 mb-5">
+        
+        <div class="col-md-6">
+            <div class="card shadow-sm h-100 border-0">
+                <div class="card-header bg-white border-0">
+                    <h6 class="mb-0 text-dark fw-bold">Data Entry Completeness</h6>
+                </div>
+                <div class="card-body">
+                     <canvas id="qualityPieChart" height="250"></canvas>
+                     
+
+[Image of Age Distribution Bar Chart]
+
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-md-6">
+            <div class="card shadow-sm h-100 border-0">
+                <div class="card-header bg-white border-0">
+                    <h6 class="mb-0 text-dark fw-bold">Student Age Group Distribution</h6>
+                </div>
+                <div class="card-body">
+                    <canvas id="ageDistributionChart" height="250"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <h2 class="h5 mb-4 text-secondary"><i class="bi bi-diagram-3 me-2"></i>Dataset Schema & Structure</h2>
+    <div class="card shadow-sm mb-4 border-0">
+        <div class="card-header bg-white border-0">
+            <h6 class="mb-0 text-dark fw-bold">Table: `student_performance_records` Field Definitions</h6>
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-sm table-hover table-borderless"> <thead class="bg-light"> <tr>
+                            <th class="text-secondary small text-uppercase">Field Name</th>
+                            <th class="text-secondary small text-uppercase">SQL Type</th>
+                            <th class="text-secondary small text-uppercase">Nullable</th>
+                            <th class="text-secondary small text-uppercase">Key</th>
+                            <th class="text-secondary small text-uppercase">Description</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for col in schema %}
+                        <tr class="border-bottom border-light"> <td class="fw-bold text-dark">{{ col.name }}</td>
+                            <td class="text-muted small">{{ col.type }}</td>
+                            <td>
+                                {% if col.nullable %}
+                                    <span class="badge rounded-pill bg-warning text-dark">Yes</span>
+                                {% else %}
+                                    <span class="badge rounded-pill bg-success">No</span>
+                                {% endif %}
+                            </td>
+                            <td>
+                                {% if col.pk %}
+                                    <span class="badge rounded-pill bg-info">PK</span>
+                                {% else %}
+                                    -
+                                {% endif %}
+                            </td>
+                            <td class="text-muted small">{{ col.description }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+
+{% endblock %}
+
+{% block scripts %}
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.3/dist/chart.umd.min.js"></script>
+    <script>
+        // Only run chart rendering if there are records
+        if ({{ metrics.total_records }} > 0) {
+            
+            // Assuming 5 required fields were checked in the backend: Student_Age, Sex, Scholarship, Weekly_Study_Hours, Grade
+            const totalPossibleDataPoints = {{ metrics.total_records }} * 5; 
+            const totalFilled = totalPossibleDataPoints - {{ metrics.missing_values }};
+            const totalMissing = {{ metrics.missing_values }};
+
+            // --- Chart 1: Quality Completeness Pie Chart ---
+            const qualityPieContext = document.getElementById('qualityPieChart').getContext('2d');
+            const qualityData = {
+                labels: ['Data Filled', 'Data Missing'],
+                datasets: [{
+                    data: [totalFilled, totalMissing],
+                    // Professional Color Palette: Teal/Blue for good, soft Red for bad
+                    backgroundColor: ['#20c997', '#dc3545'], // Success/Teal and Danger colors
+                    hoverBackgroundColor: ['#17a673', '#c82333']
+                }]
+            };
+            new Chart(qualityPieContext, {
+                type: 'doughnut',
+                data: qualityData,
+                options: {
+                    responsive: false, 
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { position: 'bottom' },
+                        title: { display: false }
+                    }
+                }
+            });
+
+
+            // --- Chart 2: Age Distribution ---
+            const ageDistributionContext = document.getElementById('ageDistributionChart').getContext('2d');
+            
+            const ageLabels = [];
+            const ageCounts = [];
+            
+            {% for age, count in metrics.age_distribution %}
+                ageLabels.push('{{ age }}');
+                ageCounts.push({{ count }});
+            {% endfor %}
+
+            const ageConfig = {
+                type: 'bar',
+                data: {
+                    labels: ageLabels,
+                    datasets: [{
+                        label: 'Number of Students',
+                        data: ageCounts,
+                        // Professional Color Palette: Deep Blue
+                        backgroundColor: '#007bff', 
+                        borderColor: '#007bff',
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: false,
+                    maintainAspectRatio: false,
+                    scales: { 
+                        y: { 
+                            beginAtZero: true,
+                            grid: { color: '#f0f0f0' } // Subtle grid lines
+                        }
+                    },
+                    plugins: { legend: { display: false } }
+                }
+            };
+            new Chart(ageDistributionContext, ageConfig);
+        }
+    </script>
+{% endblock %}

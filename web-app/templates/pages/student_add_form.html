@@ -1,0 +1,119 @@
+{% extends "base.html" %}
+
+{% block page_header %}
+<nav aria-label="breadcrumb" class="mb-4">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="{{ url_for('home') }}">Dashboard</a></li>
+        <li class="breadcrumb-item"><a href="/data">Data Records</a></li>
+        <li class="breadcrumb-item active" aria-current="page">Add Record</li>
+    </ol>
+</nav>
+<h1 class="mb-4"><i class="bi bi-plus-lg me-2"></i>{{ title }}</h1>
+{% endblock %}
+
+{% block content %}
+    <div class="card shadow-sm p-4">
+        <form action="{{ url_for('submit_student_record') }}" method="POST">
+            <h5 class="card-title mb-4">Enter Student Details</h5>
+            
+            <div class="row g-3">
+                <div class="col-md-4">
+                    <label for="student_age" class="form-label">Age Range</label>
+                    <select id="student_age" name="student_age" class="form-select">
+                        <option value="19-22">19-22</option>
+                        <option value="23-26">23-26</option>
+                        </select>
+                </div>
+                <div class="col-md-4">
+                    <label for="sex" class="form-label">Sex</label>
+                    <select id="sex" name="sex" class="form-select">
+                        <option value="Male">Male</option>
+                        <option value="Female">Female</option>
+                        <option value="Other">Other</option>
+                    </select>
+                </div>
+
+                <div class="col-md-6">
+                    <label for="high_school_type" class="form-label">High School Type</label>
+                    <select id="high_school_type" name="high_school_type" class="form-select">
+                        <option value="Academic">Academic</option>
+                        <option value="Vocational">Vocational</option>
+                        <option value="Other">Other</option>
+                    </select>
+                </div>
+                <div class="col-md-6">
+                    <label for="scholarship" class="form-label">Scholarship Status</label>
+                    <input type="text" class="form-control" id="scholarship" name="scholarship" placeholder="e.g., 50%, 100%, No" required>
+                </div>
+
+                <div class="col-md-4">
+                    <label for="additional_work" class="form-label">Additional Work</label>
+                    <select id="additional_work" name="additional_work" class="form-select">
+                        <option value="Yes">Yes</option>
+                        <option value="No">No</option>
+                    </select>
+                </div>
+                <div class="col-md-4">
+                    <label for="sports_activity" class="form-label">Sports Activity</label>
+                    <select id="sports_activity" name="sports_activity" class="form-select">
+                        <option value="Yes">Yes</option>
+                        <option value="No">No</option>
+                    </select>
+                </div>
+                <div class="col-md-4">
+                    <label for="transportation" class="form-label">Transportation</label>
+                    <input type="text" class="form-control" id="transportation" name="transportation" placeholder="e.g., Private, Public, None" required>
+                </div>
+
+                <div class="col-md-4">
+                    <label for="weekly_study_hours" class="form-label">Weekly Study Hours</label>
+                    <input type="number" class="form-control" id="weekly_study_hours" name="weekly_study_hours" min="0" required>
+                </div>
+                <div class="col-md-4">
+                    <label for="attendance" class="form-label">Attendance</label>
+                    <input type="text" class="form-control" id="attendance" name="attendance" placeholder="e.g., Always, Sometimes, Never" required>
+                </div>
+                <div class="col-md-4">
+                    <label for="final_grade" class="form-label">Final Grade (AA, AB, etc.)</label>
+                    <input type="text" class="form-control" id="final_grade" name="final_grade" required>
+                </div>
+                
+                <div class="col-md-3">
+                    <label for="reading" class="form-label">Reading</label>
+                    <select id="reading" name="reading" class="form-select">
+                        <option value="Yes">Yes</option>
+                        <option value="No">No</option>
+                    </select>
+                </div>
+                <div class="col-md-3">
+                    <label for="notes" class="form-label">Notes</label>
+                    <select id="notes" name="notes" class="form-select">
+                        <option value="Yes">Yes</option>
+                        <option value="No">No</option>
+                    </select>
+                </div>
+                <div class="col-md-3">
+                    <label for="listening_in_class" class="form-label">Listening in Class</label>
+                    <select id="listening_in_class" name="listening_in_class" class="form-select">
+                        <option value="Yes">Yes</option>
+                        <option value="No">No</option>
+                    </select>
+                </div>
+                <div class="col-md-3">
+                    <label for="project_work" class="form-label">Project Work</label>
+                    <select id="project_work" name="project_work" class="form-select">
+                        <option value="Yes">Yes</option>
+                        <option value="No">No</option>
+                    </select>
+                </div>
+
+            </div>
+
+            <hr class="my-4">
+            <div class="d-flex justify-content-end">
+                <a href="/data" class="btn btn-secondary me-2">Cancel</a>
+                <button type="submit" class="btn btn-success"><i class="bi bi-save me-1"></i> Save Record</button>
+            </div>
+        </form>
+    </div>
+{% endblock %}

@@ -1,0 +1,136 @@
+{% extends "base_invitee.html" %}
+
+{% block title %}
+    Data Submission | Student Performance
+{% endblock %}
+
+{% block content %}
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <div class="card shadow-lg mb-4 border-info border-3">
+                <div class="card-body p-5">
+                    <h1 class="card-title text-info mb-3">
+                        <i class="bi bi-person-fill-add me-2"></i>Welcome!
+                    </h1>
+                    <p class="lead">
+                        You have been invited to submit a new student performance record. Please fill out the form below accurately.
+                    </p>
+                    <p class="text-muted mb-0">
+                        *All fields are required unless marked otherwise. Your submitted email (`{{ email_id }}`) will be logged for tracking.
+                    </p>
+                </div>
+            </div>
+
+            <div class="card shadow-lg mb-5">
+                <div class="card-header bg-primary text-white">
+                    <h4 class="mb-0">Student Data Entry Form</h4>
+                </div>
+                    <div class="card shadow-sm p-4">
+                        <form action="{{ url_for('submit_student_record') }}" method="POST">
+                            <h5 class="card-title mb-4">Enter Student Details</h5>
+                            
+                            <div class="row g-3">
+                                <div class="col-md-4">
+                                    <label for="student_age" class="form-label">Age Range</label>
+                                    <select id="student_age" name="student_age" class="form-select">
+                                        <option value="19-22">19-22</option>
+                                        <option value="23-26">23-26</option>
+                                        </select>
+                                </div>
+                                <div class="col-md-4">
+                                    <label for="sex" class="form-label">Sex</label>
+                                    <select id="sex" name="sex" class="form-select">
+                                        <option value="Male">Male</option>
+                                        <option value="Female">Female</option>
+                                        <option value="Other">Other</option>
+                                    </select>
+                                </div>
+
+                                <div class="col-md-6">
+                                    <label for="high_school_type" class="form-label">High School Type</label>
+                                    <select id="high_school_type" name="high_school_type" class="form-select">
+                                        <option value="Academic">Academic</option>
+                                        <option value="Vocational">Vocational</option>
+                                        <option value="Other">Other</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-6">
+                                    <label for="scholarship" class="form-label">Scholarship Status</label>
+                                    <input type="text" class="form-control" id="scholarship" name="scholarship" placeholder="e.g., 50%, 100%, No" required>
+                                    <input type="hidden" name="is_invitee" value="True">
+                                </div>
+
+                                <div class="col-md-4">
+                                    <label for="additional_work" class="form-label">Additional Work</label>
+                                    <select id="additional_work" name="additional_work" class="form-select">
+                                        <option value="Yes">Yes</option>
+                                        <option value="No">No</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-4">
+                                    <label for="sports_activity" class="form-label">Sports Activity</label>
+                                    <select id="sports_activity" name="sports_activity" class="form-select">
+                                        <option value="Yes">Yes</option>
+                                        <option value="No">No</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-4">
+                                    <label for="transportation" class="form-label">Transportation</label>
+                                    <input type="text" class="form-control" id="transportation" name="transportation" placeholder="e.g., Private, Public, None" required>
+                                </div>
+
+                                <div class="col-md-4">
+                                    <label for="weekly_study_hours" class="form-label">Weekly Study Hours</label>
+                                    <input type="number" class="form-control" id="weekly_study_hours" name="weekly_study_hours" min="0" required>
+                                </div>
+                                <div class="col-md-4">
+                                    <label for="attendance" class="form-label">Attendance</label>
+                                    <input type="text" class="form-control" id="attendance" name="attendance" placeholder="e.g., Always, Sometimes, Never" required>
+                                </div>
+                                <div class="col-md-4">
+                                    <label for="final_grade" class="form-label">Final Grade (AA, AB, etc.)</label>
+                                    <input type="text" class="form-control" id="final_grade" name="final_grade" required>
+                                </div>
+                                
+                                <div class="col-md-3">
+                                    <label for="reading" class="form-label">Reading</label>
+                                    <select id="reading" name="reading" class="form-select">
+                                        <option value="Yes">Yes</option>
+                                        <option value="No">No</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-3">
+                                    <label for="notes" class="form-label">Notes</label>
+                                    <select id="notes" name="notes" class="form-select">
+                                        <option value="Yes">Yes</option>
+                                        <option value="No">No</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-3">
+                                    <label for="listening_in_class" class="form-label">Listening in Class</label>
+                                    <select id="listening_in_class" name="listening_in_class" class="form-select">
+                                        <option value="Yes">Yes</option>
+                                        <option value="No">No</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-3">
+                                    <label for="project_work" class="form-label">Project Work</label>
+                                    <select id="project_work" name="project_work" class="form-select">
+                                        <option value="Yes">Yes</option>
+                                        <option value="No">No</option>
+                                    </select>
+                                </div>
+
+                            </div>
+
+                            <hr class="my-4">
+                            <div class="d-flex justify-content-end">
+                                <a href="/data" class="btn btn-secondary me-2">Cancel</a>
+                                <button type="submit" class="btn btn-success"><i class="bi bi-save me-1"></i> Save Record</button>
+                            </div>
+                        </form>
+                    </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

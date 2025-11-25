@@ -1,0 +1,67 @@
+{% extends "base.html" %}
+
+{% block page_header %}
+<nav aria-label="breadcrumb" class="mb-4">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="{{ url_for('home') }}">Dashboard</a></li>
+        <li class="breadcrumb-item"><a href="/data">Data Records</a></li>
+        <li class="breadcrumb-item active" aria-current="page">Bulk Import</li>
+    </ol>
+</nav>
+<h1 class="mb-4"><i class="bi bi-file-earmark-arrow-up me-2"></i>Bulk Data Import</h1>
+{% endblock %}
+
+{% block content %}
+
+    {% if error %}
+        <div class="alert alert-danger" role="alert">
+            <h4 class="alert-heading"><i class="bi bi-x-octagon-fill me-2"></i>Import Failed!</h4>
+            {{ error }}
+        </div>
+    {% elif imported_count is not none %}
+        <div class="alert alert-warning" role="alert">
+            <h4 class="alert-heading"><i class="bi bi-exclamation-triangle-fill me-2"></i>Partial Import with Errors</h4>
+            Successfully imported {{ imported_count }} rows.
+            <hr>
+            <p>The following rows had validation issues and were skipped:</p>
+            <ul class="list-unstyled small">
+                {% for err in errors %}
+                <li><i class="bi bi-dot"></i> {{ err }}</li>
+                {% endfor %}
+            </ul>
+        </div>
+    {% endif %}
+
+    <div class="card shadow-sm">
+        <div class="card-header bg-white">
+            <h5 class="mb-0">Import Steps</h5>
+        </div>
+        <div class="card-body">
+            <div class="mb-4">
+                <h6>Step 1: Download Template</h6>
+                <p class="text-muted small">Use the template to ensure your headers and column order are correct.</p>
+                <a href="/data/download_template" class="btn btn-sm btn-outline-secondary"><i class="bi bi-download me-1"></i> Download Template (header.csv)</a>
+            </div>
+
+            <hr>
+
+            <div class="mb-4">
+                <h6>Step 2: Upload Data File</h6>
+                <form method="POST" action="/data/upload" enctype="multipart/form-data">
+                    <div class="row g-3 align-items-center">
+                        <div class="col-auto">
+                            <label for="csv_file" class="col-form-label">Select CSV:</label>
+                        </div>
+                        <div class="col-md-5">
+                            <input type="file" class="form-control form-control-sm" id="csv_file" name="csv_file" accept=".csv" required>
+                        </div>
+                        <div class="col-auto">
+                            <button type="submit" class="btn btn-success btn-sm"><i class="bi bi-cloud-upload me-1"></i> Validate and Upload</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}
