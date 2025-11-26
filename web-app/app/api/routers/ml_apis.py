@@ -23,9 +23,9 @@ ML_IMPORTANCE = pd.DataFrame()
 
 try:
     # Adjust paths based on the expected location of the artifacts
-    pipeline_path = os.path.join(ARTIFACTS_PATH, '../../ml_artifacts/ml_model_pipeline.pkl')
-    metrics_path = os.path.join(ARTIFACTS_PATH, '../../ml_artifacts/ml_metrics.pkl')
-    importance_path = os.path.join(ARTIFACTS_PATH, '../../ml_artifacts/ml_feature_importance.pkl')
+    pipeline_path = os.path.join(ARTIFACTS_PATH, '..\..\ml_artifacts\ml_model_pipeline.pkl')
+    metrics_path = os.path.join(ARTIFACTS_PATH, '..\..\ml_artifacts\ml_metrics.pkl')
+    importance_path = os.path.join(ARTIFACTS_PATH, '..\..\ml_artifacts\ml_feature_importance.pkl')
     
     ML_PIPELINE = joblib.load(pipeline_path)
     ML_METRICS.update(joblib.load(metrics_path))
