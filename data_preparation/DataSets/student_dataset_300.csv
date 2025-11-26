@@ -1,0 +1,301 @@
+student_id,name,age,subject,attendance,score,grade
+S1000,Student_1,20,History,93.3,69.7,B
+S1001,Student_2,21,English,84.5,72.6,B+
+S1002,Student_3,19,Computer Science,84.7,74.5,B+
+S1003,Student_4,19,Geography,90.5,72.1,B+
+S1004,Student_5,22,Geography,98.8,92.3,A+
+S1005,Student_6,21,Biology,90.1,70.7,B+
+S1006,Student_7,18,Computer Science,84.6,66.4,B
+S1007,Student_8,22,Geography,86.2,74.7,B+
+S1008,Student_9,20,Computer Science,96.8,86.6,A
+S1009,Student_10,21,Mathematics,86.4,73.8,B+
+S1010,Student_11,20,Biology,83.9,67.8,B
+S1011,Student_12,21,Computer Science,94.9,76.2,B+
+S1012,Student_13,18,Geography,100.0,90.5,A+
+S1013,Student_14,22,History,94.4,76.9,B+
+S1014,Student_15,22,English,93.4,80.9,A
+S1015,Student_16,21,Computer Science,91.6,96.4,A+
+S1016,Student_17,18,Mathematics,92.1,66.6,B
+S1017,Student_18,17,History,93.5,81.9,A
+S1018,Student_19,19,Chemistry,85.0,69.5,B
+S1019,Student_20,17,Computer Science,84.6,76.8,B+
+S1020,Student_21,22,Computer Science,95.7,100.0,A+
+S1021,Student_22,22,Chemistry,77.7,74.7,B+
+S1022,Student_23,22,Chemistry,92.2,90.1,A+
+S1023,Student_24,22,English,89.1,69.6,B
+S1024,Student_25,19,English,89.6,85.4,A
+S1025,Student_26,21,Computer Science,85.3,81.6,A
+S1026,Student_27,21,English,85.3,80.2,A
+S1027,Student_28,19,Chemistry,93.0,87.7,A
+S1028,Student_29,22,Biology,86.8,75.5,B+
+S1029,Student_30,22,Geography,98.2,81.0,A
+S1030,Student_31,20,Mathematics,85.8,73.0,B+
+S1031,Student_32,17,Chemistry,97.6,79.7,B+
+S1032,Student_33,17,Chemistry,90.0,74.1,B+
+S1033,Student_34,17,Geography,87.6,68.8,B
+S1034,Student_35,20,Computer Science,89.0,84.4,A
+S1035,Student_36,17,Biology,91.5,74.6,B+
+S1036,Student_37,20,Biology,89.9,60.5,B
+S1037,Student_38,17,History,90.4,92.0,A+
+S1038,Student_39,22,English,92.9,78.2,B+
+S1039,Student_40,19,Geography,89.8,63.5,B
+S1040,Student_41,22,Computer Science,85.4,79.7,B+
+S1041,Student_42,19,Mathematics,85.2,86.2,A
+S1042,Student_43,20,Physics,93.5,97.3,A+
+S1043,Student_44,17,Mathematics,84.1,69.7,B
+S1044,Student_45,21,Chemistry,100.0,91.0,A+
+S1045,Student_46,19,Physics,80.7,70.1,B+
+S1046,Student_47,20,Mathematics,84.5,87.0,A
+S1047,Student_48,18,Computer Science,87.7,73.1,B+
+S1048,Student_49,17,Physics,94.9,71.1,B+
+S1049,Student_50,18,Computer Science,98.2,100.0,A+
+S1050,Student_51,18,Mathematics,91.6,86.5,A
+S1051,Student_52,17,Mathematics,97.8,78.3,B+
+S1052,Student_53,19,Biology,91.5,78.0,B+
+S1053,Student_54,20,Chemistry,95.1,94.4,A+
+S1054,Student_55,22,Mathematics,91.0,70.1,B+
+S1055,Student_56,22,Chemistry,82.9,75.6,B+
+S1056,Student_57,17,Biology,85.5,61.4,B
+S1057,Student_58,20,Computer Science,95.8,89.9,A
+S1058,Student_59,17,Computer Science,84.8,79.0,B+
+S1059,Student_60,19,Geography,84.7,62.2,B
+S1060,Student_61,22,Geography,95.3,75.3,B+
+S1061,Student_62,19,Chemistry,90.1,87.7,A
+S1062,Student_63,20,English,81.6,71.0,B+
+S1063,Student_64,21,Computer Science,83.6,80.7,A
+S1064,Student_65,20,Geography,89.3,78.4,B+
+S1065,Student_66,21,English,84.9,61.8,B
+S1066,Student_67,17,Computer Science,76.1,68.7,B
+S1067,Student_68,18,English,83.1,83.6,A
+S1068,Student_69,19,Physics,92.1,83.2,A
+S1069,Student_70,17,Mathematics,84.2,85.4,A
+S1070,Student_71,21,Physics,93.1,83.6,A
+S1071,Student_72,17,Computer Science,90.1,89.1,A
+S1072,Student_73,17,Biology,93.4,85.8,A
+S1073,Student_74,22,Computer Science,90.4,79.0,B+
+S1074,Student_75,22,Chemistry,100.0,69.1,B
+S1075,Student_76,21,Geography,87.5,71.6,B+
+S1076,Student_77,20,Physics,87.2,83.5,A
+S1077,Student_78,20,History,99.4,80.5,A
+S1078,Student_79,20,Biology,85.6,72.2,B+
+S1079,Student_80,21,Computer Science,100.0,100.0,A+
+S1080,Student_81,20,Computer Science,90.1,85.6,A
+S1081,Student_82,22,Chemistry,86.0,79.6,B+
+S1082,Student_83,20,Physics,85.4,86.6,A
+S1083,Student_84,18,Physics,87.2,69.5,B
+S1084,Student_85,22,Geography,95.7,87.7,A
+S1085,Student_86,21,Mathematics,100.0,95.3,A+
+S1086,Student_87,19,Biology,82.9,70.2,B+
+S1087,Student_88,22,Mathematics,85.9,73.6,B+
+S1088,Student_89,17,Geography,92.7,81.4,A
+S1089,Student_90,20,Computer Science,89.9,74.5,B+
+S1090,Student_91,20,Mathematics,100.0,83.0,A
+S1091,Student_92,18,Physics,90.0,83.0,A
+S1092,Student_93,21,History,88.8,71.5,B+
+S1093,Student_94,19,Biology,78.6,75.1,B+
+S1094,Student_95,20,Mathematics,100.0,71.4,B+
+S1095,Student_96,21,Biology,92.6,75.2,B+
+S1096,Student_97,18,Chemistry,91.7,72.4,B+
+S1097,Student_98,17,Physics,95.3,77.5,B+
+S1098,Student_99,18,Geography,86.5,77.0,B+
+S1099,Student_100,20,Physics,95.7,93.2,A+
+S1100,Student_101,21,Computer Science,94.9,91.0,A+
+S1101,Student_102,17,Biology,93.3,71.0,B+
+S1102,Student_103,19,Mathematics,86.3,79.1,B+
+S1103,Student_104,17,English,96.3,84.9,A
+S1104,Student_105,21,Biology,99.3,77.9,B+
+S1105,Student_106,17,Chemistry,97.8,82.4,A
+S1106,Student_107,22,History,88.6,77.7,B+
+S1107,Student_108,20,History,91.9,72.5,B+
+S1108,Student_109,20,Chemistry,84.9,71.8,B+
+S1109,Student_110,21,Chemistry,96.7,98.5,A+
+S1110,Student_111,21,Biology,100.0,85.2,A
+S1111,Student_112,20,Mathematics,93.7,92.8,A+
+S1112,Student_113,21,Geography,91.5,70.1,B+
+S1113,Student_114,18,Mathematics,93.4,88.7,A
+S1114,Student_115,21,History,81.3,53.8,C
+S1115,Student_116,20,Mathematics,86.0,86.7,A
+S1116,Student_117,19,History,98.9,72.1,B+
+S1117,Student_118,18,Physics,85.7,58.6,C
+S1118,Student_119,21,History,98.7,63.6,B
+S1119,Student_120,20,Biology,93.9,81.4,A
+S1120,Student_121,17,Chemistry,93.0,79.1,B+
+S1121,Student_122,20,Mathematics,90.3,72.5,B+
+S1122,Student_123,21,Geography,78.6,68.7,B
+S1123,Student_124,22,History,92.8,74.7,B+
+S1124,Student_125,18,English,98.7,92.6,A+
+S1125,Student_126,17,History,84.6,79.9,B+
+S1126,Student_127,17,Chemistry,89.3,83.3,A
+S1127,Student_128,20,History,85.0,63.2,B
+S1128,Student_129,18,Computer Science,96.2,72.5,B+
+S1129,Student_130,20,History,92.1,88.7,A
+S1130,Student_131,17,History,93.4,82.5,A
+S1131,Student_132,21,History,82.1,80.3,A
+S1132,Student_133,22,Physics,82.6,72.6,B+
+S1133,Student_134,17,Geography,91.8,65.7,B
+S1134,Student_135,17,Geography,91.6,84.1,A
+S1135,Student_136,17,Physics,92.1,94.0,A+
+S1136,Student_137,21,Geography,91.0,80.3,A
+S1137,Student_138,21,History,86.1,79.7,B+
+S1138,Student_139,21,Geography,86.1,63.6,B
+S1139,Student_140,21,History,92.0,71.5,B+
+S1140,Student_141,18,Biology,69.1,55.1,C
+S1141,Student_142,19,Chemistry,95.6,75.9,B+
+S1142,Student_143,20,History,86.6,89.6,A
+S1143,Student_144,21,History,96.9,81.7,A
+S1144,Student_145,22,Computer Science,79.6,85.2,A
+S1145,Student_146,19,Chemistry,88.4,80.5,A
+S1146,Student_147,22,Mathematics,87.1,87.4,A
+S1147,Student_148,18,Chemistry,95.8,85.8,A
+S1148,Student_149,18,Computer Science,92.8,88.9,A
+S1149,Student_150,20,Computer Science,90.8,78.8,B+
+S1150,Student_151,18,History,92.3,62.9,B
+S1151,Student_152,19,Chemistry,77.0,81.9,A
+S1152,Student_153,19,Geography,84.6,73.2,B+
+S1153,Student_154,20,Computer Science,96.0,84.9,A
+S1154,Student_155,19,History,90.5,75.2,B+
+S1155,Student_156,19,Chemistry,87.0,82.0,A
+S1156,Student_157,18,History,90.3,68.3,B
+S1157,Student_158,21,Mathematics,94.7,80.5,A
+S1158,Student_159,17,Geography,82.7,57.9,C
+S1159,Student_160,18,Mathematics,100.0,85.4,A
+S1160,Student_161,22,Chemistry,95.1,75.1,B+
+S1161,Student_162,17,Chemistry,86.8,68.8,B
+S1162,Student_163,22,Geography,80.9,76.7,B+
+S1163,Student_164,18,History,92.4,67.6,B
+S1164,Student_165,22,Chemistry,84.2,72.0,B+
+S1165,Student_166,18,Geography,80.4,66.9,B
+S1166,Student_167,17,English,88.9,76.7,B+
+S1167,Student_168,17,Mathematics,86.1,67.2,B
+S1168,Student_169,20,Mathematics,91.3,87.3,A
+S1169,Student_170,20,Physics,90.0,88.8,A
+S1170,Student_171,20,English,92.4,93.1,A+
+S1171,Student_172,17,Biology,87.7,66.8,B
+S1172,Student_173,22,Biology,95.6,93.8,A+
+S1173,Student_174,19,History,93.0,72.8,B+
+S1174,Student_175,21,Geography,86.3,60.0,B
+S1175,Student_176,20,Geography,86.4,63.2,B
+S1176,Student_177,17,English,91.0,86.1,A
+S1177,Student_178,19,Biology,100.0,81.4,A
+S1178,Student_179,22,Mathematics,91.7,94.6,A+
+S1179,Student_180,18,Chemistry,87.4,77.9,B+
+S1180,Student_181,18,Geography,84.5,73.7,B+
+S1181,Student_182,20,Mathematics,100.0,89.1,A
+S1182,Student_183,22,Computer Science,90.1,75.1,B+
+S1183,Student_184,20,History,86.1,69.3,B
+S1184,Student_185,18,Computer Science,86.4,85.2,A
+S1185,Student_186,21,Mathematics,93.2,93.1,A+
+S1186,Student_187,22,English,88.7,78.2,B+
+S1187,Student_188,21,Geography,86.6,82.3,A
+S1188,Student_189,21,Computer Science,94.0,83.7,A
+S1189,Student_190,22,Biology,89.3,74.3,B+
+S1190,Student_191,17,History,87.1,66.2,B
+S1191,Student_192,21,History,93.3,82.9,A
+S1192,Student_193,18,Geography,95.2,74.6,B+
+S1193,Student_194,17,Physics,88.5,86.2,A
+S1194,Student_195,22,Computer Science,78.8,70.2,B+
+S1195,Student_196,17,Mathematics,82.7,60.3,B
+S1196,Student_197,18,Geography,76.3,73.5,B+
+S1197,Student_198,19,English,95.5,91.1,A+
+S1198,Student_199,20,English,89.9,86.4,A
+S1199,Student_200,22,English,95.0,90.1,A+
+S1200,Student_201,19,English,87.9,72.9,B+
+S1201,Student_202,18,Physics,99.9,84.6,A
+S1202,Student_203,22,Geography,76.5,67.6,B
+S1203,Student_204,21,Computer Science,90.3,100.0,A+
+S1204,Student_205,21,History,94.5,68.2,B
+S1205,Student_206,18,Chemistry,98.3,90.7,A+
+S1206,Student_207,20,Physics,85.4,63.4,B
+S1207,Student_208,19,Geography,91.0,80.5,A
+S1208,Student_209,18,Geography,94.6,78.4,B+
+S1209,Student_210,22,Physics,88.8,76.4,B+
+S1210,Student_211,20,Chemistry,90.7,82.4,A
+S1211,Student_212,20,History,91.3,76.6,B+
+S1212,Student_213,18,Mathematics,100.0,97.8,A+
+S1213,Student_214,22,Chemistry,91.1,77.7,B+
+S1214,Student_215,22,Chemistry,84.1,70.3,B+
+S1215,Student_216,21,Physics,100.0,89.2,A
+S1216,Student_217,21,English,89.1,73.9,B+
+S1217,Student_218,20,Mathematics,95.1,64.5,B
+S1218,Student_219,19,Geography,82.3,56.5,C
+S1219,Student_220,18,Chemistry,81.0,66.7,B
+S1220,Student_221,20,Chemistry,88.5,72.6,B+
+S1221,Student_222,20,Geography,85.7,76.8,B+
+S1222,Student_223,18,Biology,90.5,62.5,B
+S1223,Student_224,17,Biology,100.0,69.0,B
+S1224,Student_225,22,Biology,82.0,68.8,B
+S1225,Student_226,17,Computer Science,90.1,81.9,A
+S1226,Student_227,19,Computer Science,89.3,82.7,A
+S1227,Student_228,21,Mathematics,89.8,74.5,B+
+S1228,Student_229,19,Physics,96.2,74.0,B+
+S1229,Student_230,18,Physics,80.8,92.0,A+
+S1230,Student_231,22,Geography,87.9,73.2,B+
+S1231,Student_232,21,English,89.1,81.5,A
+S1232,Student_233,18,Chemistry,83.3,84.7,A
+S1233,Student_234,20,Computer Science,95.6,96.7,A+
+S1234,Student_235,17,Mathematics,85.8,69.8,B
+S1235,Student_236,19,English,86.9,79.4,B+
+S1236,Student_237,17,Biology,87.9,70.5,B+
+S1237,Student_238,22,Computer Science,91.4,85.1,A
+S1238,Student_239,20,Biology,83.5,73.7,B+
+S1239,Student_240,18,English,98.2,90.7,A+
+S1240,Student_241,21,Chemistry,98.2,90.2,A+
+S1241,Student_242,17,English,81.0,79.9,B+
+S1242,Student_243,18,Chemistry,80.7,73.4,B+
+S1243,Student_244,21,History,97.5,60.6,B
+S1244,Student_245,18,History,91.3,72.3,B+
+S1245,Student_246,22,Biology,95.8,78.4,B+
+S1246,Student_247,17,Physics,100.0,90.4,A+
+S1247,Student_248,17,Geography,84.0,83.0,A
+S1248,Student_249,18,Physics,91.8,83.4,A
+S1249,Student_250,21,Chemistry,90.7,87.1,A
+S1250,Student_251,18,Biology,85.4,70.3,B+
+S1251,Student_252,21,Mathematics,100.0,86.8,A
+S1252,Student_253,21,Physics,87.5,69.8,B
+S1253,Student_254,22,Chemistry,99.7,96.3,A+
+S1254,Student_255,17,History,79.0,53.0,C
+S1255,Student_256,18,Geography,87.9,72.9,B+
+S1256,Student_257,20,Chemistry,86.3,61.8,B
+S1257,Student_258,19,Computer Science,91.4,86.6,A
+S1258,Student_259,19,Geography,100.0,78.6,B+
+S1259,Student_260,22,Geography,84.8,74.4,B+
+S1260,Student_261,20,English,93.6,68.7,B
+S1261,Student_262,19,Mathematics,100.0,86.2,A
+S1262,Student_263,18,Mathematics,87.9,79.3,B+
+S1263,Student_264,17,Computer Science,89.8,96.0,A+
+S1264,Student_265,19,Computer Science,80.7,71.4,B+
+S1265,Student_266,19,Physics,93.8,87.8,A
+S1266,Student_267,22,Geography,79.4,73.7,B+
+S1267,Student_268,20,Chemistry,89.6,80.6,A
+S1268,Student_269,20,Geography,97.7,84.7,A
+S1269,Student_270,21,Geography,90.2,73.3,B+
+S1270,Student_271,18,Mathematics,98.1,93.7,A+
+S1271,Student_272,17,History,88.1,71.4,B+
+S1272,Student_273,17,English,82.5,92.8,A+
+S1273,Student_274,22,English,83.5,81.2,A
+S1274,Student_275,18,Chemistry,89.8,81.3,A
+S1275,Student_276,22,Biology,87.2,78.9,B+
+S1276,Student_277,18,English,90.6,74.8,B+
+S1277,Student_278,19,Biology,83.7,79.2,B+
+S1278,Student_279,20,English,92.5,64.6,B
+S1279,Student_280,21,Geography,96.2,66.1,B
+S1280,Student_281,21,Physics,88.7,83.9,A
+S1281,Student_282,19,Physics,87.4,65.4,B
+S1282,Student_283,19,Chemistry,86.9,84.8,A
+S1283,Student_284,21,Biology,95.5,80.9,A
+S1284,Student_285,17,Physics,88.4,70.4,B+
+S1285,Student_286,20,History,78.8,60.6,B
+S1286,Student_287,18,Biology,94.0,90.1,A+
+S1287,Student_288,17,History,89.8,73.7,B+
+S1288,Student_289,17,Mathematics,83.6,79.3,B+
+S1289,Student_290,18,History,95.9,75.0,B+
+S1290,Student_291,22,Computer Science,100.0,84.7,A
+S1291,Student_292,17,English,91.0,82.7,A
+S1292,Student_293,21,Chemistry,80.6,69.1,B
+S1293,Student_294,18,Mathematics,86.3,71.6,B+
+S1294,Student_295,19,Computer Science,87.0,78.3,B+
+S1295,Student_296,17,Mathematics,87.8,67.9,B
+S1296,Student_297,18,Physics,85.0,76.8,B+
+S1297,Student_298,19,Geography,98.3,85.1,A
+S1298,Student_299,17,Mathematics,76.5,61.2,B
+S1299,Student_300,19,Biology,86.4,70.9,B+

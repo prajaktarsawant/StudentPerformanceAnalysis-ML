@@ -19,9 +19,11 @@ app.mount("/static", StaticFiles(directory="static"), name="static")
 templates = Jinja2Templates(directory="templates")
 
 # --- Include Routers ---
-from .api.routers import ui
+from .api.routers import ui, ml_apis
 
 app.include_router(ui.router)
+app.include_router(ml_apis.router)
+
 # If you add API endpoints, include them like this:
 from .api.routers import item, student
 app.include_router(student.router, prefix="/api/v1")

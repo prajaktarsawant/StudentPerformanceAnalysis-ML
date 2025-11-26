@@ -1,0 +1,600 @@
+{% extends "base.html" %}
+
+{% block title %}
+    Analytical EDA Dashboard | Student Performance
+{% endblock %}
+
+{% block content %}
+    <style>
+        /* Responsive height for charts */
+        canvas {
+            width: 100% !important;
+            height: 30vh !important;
+        }
+        /* Custom class for large KPI values */
+        .kpi-value {
+            font-size: 2.5rem;
+            font-weight: 700;
+        }
+        /* Style for the loading overlay */
+        #loading-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(255, 255, 255, 0.9);
+            z-index: 1050;
+        }
+    </style>
+
+    <!-- Loading Overlay -->
+    <div id="loading-overlay" class="d-flex justify-content-center align-items-center">
+        <div class="text-center">
+            <div class="spinner-grow text-primary" role="status">
+                <span class="visually-hidden">Loading...</span>
+            </div>
+            <div class="spinner-text mt-3 fw-bold">Fetching and aggregating data...</div>
+            <div id="record-counter" class="small text-muted mt-2">0 records loaded.</div>
+        </div>
+    </div>
+
+    <div class="container-fluid">
+        <div id="error-alert" class="alert alert-danger d-none" role="alert">
+            <i class="bi bi-exclamation-triangle-fill me-2"></i>
+            <strong>Data Load Error:</strong> Failed to fetch data from the API after multiple retries. Check the network connection and console for details.
+        </div>
+
+        <!-- 1. TOP LEVEL SUMMARY (Total Records) -->
+        <div class="row mb-4">
+            <div class="col-12">
+                <div class="card p-4 bg-dark text-white shadow-lg">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <p class="text-uppercase fw-light mb-1 opacity-75">Total Records Processed</p>
+                            <span id="total-students-count" class="kpi-value">0</span>
+                        </div>
+                        <i class="bi bi-database-check" style="font-size: 3rem; opacity: 0.8;"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 2. KEY PERFORMANCE INDICATORS (New Cards) -->
+        <h2 class="h6 mb-3 text-secondary text-uppercase fw-bold">Key Performance Indicators</h2>
+        <div class="row g-4 mb-5">
+            
+            <!-- KPI 1: Average Weekly Study Hours -->
+            <div class="col-lg-4 col-md-6">
+                <div class="card p-4 bg-info text-white shadow-sm h-100">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <p class="text-uppercase fw-light mb-1 opacity-75">Avg. Weekly Study Hours</p>
+                            <span id="avg-study-hours" class="kpi-value">0.0h</span>
+                        </div>
+                        <i class="bi bi-clock-history" style="font-size: 2.5rem; opacity: 0.8;"></i>
+                    </div>
+                    <p class="mt-2 mb-0 small opacity-75">Mean time dedicated to weekly study sessions.</p>
+                </div>
+            </div>
+
+            <!-- KPI 2: Overall Pass Rate (A, B, C, D) -->
+            <div class="col-lg-4 col-md-6">
+                <div class="card p-4 bg-success text-white shadow-sm h-100">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <p class="text-uppercase fw-light mb-1 opacity-75">Overall Pass Rate</p>
+                            <span id="pass-rate" class="kpi-value">0.0%</span>
+                        </div>
+                        <i class="bi bi-person-check" style="font-size: 2.5rem; opacity: 0.8;"></i>
+                    </div>
+                    <p class="mt-2 mb-0 small opacity-75">Students achieving a final grade of D or higher.</p>
+                </div>
+            </div>
+
+            <!-- KPI 3: Top Grade Rate (A/B) -->
+            <div class="col-lg-4 col-md-12">
+                <div class="card p-4 bg-warning text-dark shadow-sm h-100">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <p class="text-uppercase fw-light mb-1 opacity-75">Top Grade (A/B) Rate</p>
+                            <span id="top-grade-rate" class="kpi-value">0.0%</span>
+                        </div>
+                        <i class="bi bi-award" style="font-size: 2.5rem; opacity: 0.8;"></i>
+                    </div>
+                    <p class="mt-2 mb-0 small opacity-75">Percentage of students achieving an A or B grade.</p>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 3. VISUALS (Charts) -->
+        <h2 class="h5 mb-4 text-secondary">Performance Drivers Analysis (Visuals)</h2>
+        <div class="row g-4 mb-5">
+            
+            <!-- Chart 1: Grade vs. Weekly Study Hours -->
+            <div class="col-lg-6 col-xl-3">
+                <div class="card h-100">
+                    <div class="card-header bg-white border-0 pt-4">
+                        <h6 class="mb-0 text-dark fw-bold">1. Study Hours vs. Grade</h6>
+                        <p class="small text-muted mb-0">Correlation between dedicated study time and final grade outcome.</p>
+                    </div>
+                    <div class="card-body chart-container">
+                        <canvas id="studyHoursChart"></canvas>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Chart 2: Grade vs. Scholarship Status -->
+            <div class="col-lg-6 col-xl-3">
+                <div class="card h-100">
+                    <div class="card-header bg-white border-0 pt-4">
+                        <h6 class="mb-0 text-dark fw-bold">2. Financial Aid Impact</h6>
+                        <p class="small text-muted mb-0">Compares performance between students with and without financial support.</p>
+                    </div>
+                    <div class="card-body chart-container">
+                        <canvas id="scholarshipChart"></canvas>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Chart 3: Grade vs. Gender -->
+            <div class="col-lg-6 col-xl-3">
+                <div class="card h-100">
+                    <div class="card-header bg-white border-0 pt-4">
+                        <h6 class="mb-0 text-dark fw-bold">3. Grade Distribution by Sex</h6>
+                        <p class="small text-muted mb-0">A demographic breakdown of final grade outcomes.</p>
+                    </div>
+                    <div class="card-body chart-container">
+                        <canvas id="sexChart"></canvas>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Chart 4: Key Behavioral Factor Correlation -->
+            <div class="col-lg-6 col-xl-3">
+                <div class="card h-100">
+                    <div class="card-header bg-white border-0 pt-4">
+                        <h6 class="mb-0 text-dark fw-bold">4. Top Grade Behavioral Factors (A/B)</h6>
+                        <p class="small text-muted mb-0">Frequency of high-performing students exhibiting positive behaviors.</p>
+                    </div>
+                    <div class="card-body chart-container">
+                        <canvas id="behaviorChart"></canvas>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- 4. LINE CHART / TABLE (Additional Analysis) -->
+        <h2 class="h5 mb-4 text-secondary">Overall Grade Distribution & Detailed Summary</h2>
+        <div class="row g-4 mb-5">
+            
+            <!-- Line Chart: Overall Grade Distribution -->
+            <div class="col-lg-8">
+                <div class="card h-100">
+                    <div class="card-header bg-white border-0 pt-4">
+                        <h6 class="mb-0 text-dark fw-bold">5. Grade Counts (A to FAIL) Line Chart</h6>
+                        <p class="small text-muted mb-0">Visualizing the raw count trend across all observed grades.</p>
+                    </div>
+                    <div class="card-body chart-container" style="height: 400px;">
+                        <canvas id="gradeDistributionLineChart"></canvas>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Summary Table Card -->
+            <div class="col-lg-4">
+                <div class="card h-100">
+                    <div class="card-header bg-white border-0 pt-4">
+                        <h6 class="mb-0 text-dark fw-bold">6. Overall Grade Count Summary</h6>
+                        <p class="small text-muted mb-0">Detailed table of student counts per final grade.</p>
+                    </div>
+                    <div class="card-body">
+                        <table class="table table-sm table-striped mb-0">
+                            <thead>
+                                <tr>
+                                    <th scope="col">Grade</th>
+                                    <th scope="col">Count</th>
+                                    <th scope="col">Percentage</th>
+                                </tr>
+                            </thead>
+                            <tbody id="grade-summary-table">
+                                <!-- Table content will be populated by JavaScript -->
+                                <tr><td colspan="3" class="text-center text-muted">Loading data...</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            
+        </div>
+
+    </div>
+{% endblock %}
+
+{% block scripts %}
+    <!-- Load jQuery -->
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <!-- Load Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.3/dist/chart.umd.min.js"></script>
+    
+    <script>
+        // --- Configuration and Constants ---
+        const API_ENDPOINT = '/api/v1/student-data';
+        const BATCH_LIMIT = 100;
+        const MAX_RECORDS_CAP = 1000; 
+        const MAX_RETRIES = 3;
+        const GRADES = ['A', 'B', 'C', 'D', 'FAIL'];
+
+        const CHART_COLORS = {
+            'A': 'rgba(25, 135, 84, 0.9)',   // Green (Success)
+            'B': 'rgba(13, 110, 253, 0.9)',  // Blue (Primary)
+            'C': 'rgba(255, 193, 7, 0.9)',   // Yellow (Warning)
+            'D': 'rgba(108, 117, 125, 0.9)', // Grey (Secondary)
+            'FAIL': 'rgba(220, 53, 69, 0.9)'    // Red (Danger)
+        };
+        const BORDER_COLORS = {
+            'A': 'rgba(25, 135, 84, 1)',
+            'B': 'rgba(13, 110, 253, 1)',
+            'C': 'rgba(255, 193, 7, 1)',
+            'D': 'rgba(108, 117, 125, 1)',
+            'FAIL': 'rgba(220, 53, 69, 1)'
+        };
+        
+        // --- Global Aggregation State ---
+        let AGGREGATION = {
+            studyHours: {
+                'Less than 5h': { 'A': 0, 'B': 0, 'C': 0, 'D': 0, 'FAIL': 0 },
+                '5-10h': { 'A': 0, 'B': 0, 'C': 0, 'D': 0, 'FAIL': 0 },
+                '10+h': { 'A': 0, 'B': 0, 'C': 0, 'D': 0, 'FAIL': 0 }
+            },
+            scholarship: {
+                'No Scholarship': { 'A': 0, 'B': 0, 'C': 0, 'D': 0, 'FAIL': 0 },
+                'Partial/Full Scholarship': { 'A': 0, 'B': 0, 'C': 0, 'D': 0, 'FAIL': 0 }
+            },
+            sex: {
+                'Male': { 'A': 0, 'B': 0, 'C': 0, 'D': 0, 'FAIL': 0 },
+                'Female': { 'A': 0, 'B': 0, 'C': 0, 'D': 0, 'FAIL': 0 }
+            },
+            behavior: {
+                'High Attendance': { 'A': 0, 'B': 0, 'C': 0, 'D': 0, 'FAIL': 0 },
+                'Regular Reading': { 'A': 0, 'B': 0, 'C': 0, 'D': 0, 'FAIL': 0 },
+                'High Project Score': { 'A': 0, 'B': 0, 'C': 0, 'D': 0, 'FAIL': 0 }
+            },
+            gradeCount: { 'A': 0, 'B': 0, 'C': 0, 'D': 0, 'FAIL': 0 }
+        };
+
+        // NEW KPI Aggregation State
+        let totalRecordsLoaded = 0;
+        let totalStudyHoursSum = 0;
+        let totalPassingStudentsCount = 0; // Grades A, B, C, D
+        let totalTopStudentsCount = 0; // Grades A, B
+
+
+        // --- Data Processing Function ---
+        function getStudyHoursCategory(hours) {
+            if (hours < 5) return 'Less than 5h';
+            if (hours >= 5 && hours < 10) return '5-10h';
+            if (hours >= 10) return '10+h';
+            return null; 
+        }
+
+        function processStudentData(students) {
+            students.forEach(student => {
+                let grade = (student.Grade || '').toUpperCase();
+                
+                // Standardize 'F' to 'FAIL' if necessary (assuming F is equivalent to FAIL in the data)
+                if (grade === 'F') {
+                    grade = 'FAIL';
+                }
+
+                if (!grade || !GRADES.includes(grade)) return; // Skip if grade is missing or invalid
+
+                // --- KPI Aggregations ---
+                
+                // 1. Total Study Hours Sum
+                const hours = Number(student.Weekly_Study_Hours);
+                if (!isNaN(hours) && hours > 0) {
+                    totalStudyHoursSum += hours;
+                }
+
+                // 2. Total Passing Students (A, B, C, D)
+                if (['A', 'B', 'C', 'D'].includes(grade)) {
+                    totalPassingStudentsCount++;
+                }
+                
+                // 3. Total Top Students (A, B)
+                if (['A', 'B'].includes(grade)) {
+                    totalTopStudentsCount++;
+                }
+
+                // --- Chart Aggregations ---
+                
+                // Update overall grade count
+                AGGREGATION.gradeCount[grade]++;
+
+                // 1. Study Hours
+                const hoursCategory = getStudyHoursCategory(hours);
+                if (hoursCategory) {
+                    AGGREGATION.studyHours[hoursCategory][grade]++;
+                }
+
+                // 2. Scholarship (Assuming INTEGER > 0 means scholarship received)
+                const scholarshipStatus = Number(student.Scholarship) > 0 ? 'Partial/Full Scholarship' : 'No Scholarship';
+                AGGREGATION.scholarship[scholarshipStatus][grade]++;
+
+                // 3. Sex (Basic categorization)
+                const sex = (student.Sex || '').toLowerCase();
+                if (sex === 'male' || sex === 'm') {
+                    AGGREGATION.sex['Male'][grade]++;
+                } else if (sex === 'female' || sex === 'f') {
+                    AGGREGATION.sex['Female'][grade]++;
+                }
+                
+                // 4. Behavioral Factors (Assuming 'Yes'/'High'/'Good' or presence indicates positive)
+                const checkPositive = (val) => val && /^(yes|high|good|1|y|h|p)/i.test(String(val).trim());
+
+                if (checkPositive(student.Attendance)) {
+                    AGGREGATION.behavior['High Attendance'][grade]++;
+                }
+                if (checkPositive(student.Reading)) {
+                    AGGREGATION.behavior['Regular Reading'][grade]++;
+                }
+                if (checkPositive(student.Project_work)) {
+                    AGGREGATION.behavior['High Project Score'][grade]++;
+                }
+            });
+        }
+
+        // --- Batch Fetching Logic with Exponential Backoff ---
+        function fetchDataBatch(offset = 0, retryCount = 0) {
+            if (offset >= MAX_RECORDS_CAP) {
+                console.warn("Reached maximum record cap. Stopping fetch.");
+                renderCharts();
+                $("#loading-overlay").addClass('d-none');
+                return;
+            }
+
+            const url = `${API_ENDPOINT}?limit=${BATCH_LIMIT}&offset=${offset}`;
+            
+            $.ajax({
+                url: url,
+                method: 'GET',
+                success: function(response) {
+                    if (typeof response === 'string') {
+                        try {
+                            response = JSON.parse(response);
+                        } catch (e) {
+                            console.error("Failed to parse response as JSON:", e);
+                            handleError(null, 'parsererror', 'Invalid JSON response', offset, retryCount);
+                            return;
+                        }
+                    }
+                    
+                    const students = response.students || [];
+                    
+                    if (students.length > 0) {
+                        processStudentData(students);
+                        totalRecordsLoaded += students.length;
+                        $('#record-counter').text(`${totalRecordsLoaded} records loaded.`);
+
+                        if (students.length === BATCH_LIMIT) {
+                            // Fetch next batch
+                            fetchDataBatch(offset + BATCH_LIMIT);
+                        } else {
+                            // Last batch received
+                            console.log(`Finished fetching data. Total records: ${totalRecordsLoaded}`);
+                            renderCharts();
+                            $("#loading-overlay").addClass('d-none');
+                        }
+                    } else {
+                        // API returned an empty array, signalling end of data
+                        console.log(`Finished fetching data (empty batch). Total records: ${totalRecordsLoaded}`);
+                        renderCharts();
+                        $("#loading-overlay").addClass('d-none');
+                    }
+                },
+                error: function(xhr, status, error) {
+                    handleError(xhr, status, error, offset, retryCount);
+                }
+            });
+        }
+
+        function handleError(xhr, status, error, offset, retryCount) {
+            if (retryCount < MAX_RETRIES) {
+                const delay = Math.pow(2, retryCount) * 1000;
+                // Retry with exponential backoff
+                console.warn(`Fetch failed for offset ${offset}, status: ${status}. Retrying in ${delay / 1000}s...`);
+                setTimeout(() => fetchDataBatch(offset, retryCount + 1), delay);
+            } else {
+                console.error(`Fetch failed permanently for offset ${offset}: ${error}`);
+                $('#error-alert').removeClass('d-none');
+                renderCharts(); 
+                $("#loading-overlay").addClass('d-none');
+            }
+        }
+
+
+        // --- Chart Rendering and KPI Calculation Functions ---
+
+        function calculateKPIs() {
+            const avgStudyHours = totalRecordsLoaded > 0 ? (totalStudyHoursSum / totalRecordsLoaded).toFixed(1) : '0.0';
+            const passRate = totalRecordsLoaded > 0 ? ((totalPassingStudentsCount / totalRecordsLoaded) * 100).toFixed(1) : '0.0';
+            const topRate = totalRecordsLoaded > 0 ? ((totalTopStudentsCount / totalRecordsLoaded) * 100).toFixed(1) : '0.0';
+
+            return { avgStudyHours, passRate, topRate };
+        }
+
+
+        // Helper function to create datasets for stacked bar charts from AGGREGATION
+        function createStackedDatasets(dataKey, labels) {
+            const datasets = [];
+            GRADES.forEach((grade) => {
+                const dataset = {
+                    label: grade,
+                    data: labels.map(label => AGGREGATION[dataKey][label][grade]),
+                    backgroundColor: CHART_COLORS[grade],
+                    borderColor: BORDER_COLORS[grade],
+                    borderWidth: 1,
+                    stack: 'GradeStack'
+                };
+                datasets.push(dataset);
+            });
+            return datasets;
+        }
+
+        function renderGradeSummaryTable() {
+            const $tableBody = $('#grade-summary-table');
+            $tableBody.empty(); // Clear loading message
+
+            let totalCount = 0;
+            GRADES.forEach(grade => {
+                totalCount += AGGREGATION.gradeCount[grade] || 0;
+            });
+
+            GRADES.forEach(grade => {
+                const count = AGGREGATION.gradeCount[grade] || 0;
+                const percentage = totalCount > 0 ? ((count / totalCount) * 100).toFixed(1) : '0.0';
+                
+                const color = BORDER_COLORS[grade].replace(/1\)$/, '0.6)').replace(/rgba/i, 'rgba'); // Use a softer version of the color
+                
+                $tableBody.append(`
+                    <tr style="background-color: ${color}">
+                        <td class="fw-bold">${grade}</td>
+                        <td>${count}</td>
+                        <td class="fw-medium">${percentage}%</td>
+                    </tr>
+                `);
+            });
+        }
+
+        function renderGradeDistributionLineChart() {
+            const data = GRADES.map(grade => AGGREGATION.gradeCount[grade]);
+            
+            // Destroy existing chart instance if it exists to prevent Chart.js errors on rerender
+            const existingChart = Chart.getChart('gradeDistributionLineChart');
+            if (existingChart) {
+                existingChart.destroy();
+            }
+
+            new Chart(document.getElementById('gradeDistributionLineChart').getContext('2d'), {
+                type: 'line',
+                data: {
+                    labels: GRADES,
+                    datasets: [{
+                        label: 'Total Student Count per Grade',
+                        data: data,
+                        backgroundColor: BORDER_COLORS['B'].replace(/1\)$/, '0.2)'), // Light blue background
+                        borderColor: BORDER_COLORS['B'],
+                        borderWidth: 3,
+                        tension: 0.3, // Smoother line
+                        fill: true,
+                        pointRadius: 5,
+                        pointBackgroundColor: BORDER_COLORS['B']
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        x: { 
+                            title: { display: true, text: 'Final Grade' }
+                        },
+                        y: { 
+                            beginAtZero: true,
+                            title: { display: true, text: 'Number of Students' }
+                        }
+                    },
+                    plugins: { 
+                        legend: { display: false },
+                        tooltip: { mode: 'index', intersect: false }
+                    }
+                }
+            });
+        }
+
+
+        function renderCharts() {
+            // Hide loading indicator
+            $('#loading-overlay').hide();
+            
+            // 1. Update Summary Card
+            $('#total-students-count').text(totalRecordsLoaded.toLocaleString());
+
+            // 2. Update KPI Cards (NEW)
+            const kpis = calculateKPIs();
+            $('#avg-study-hours').text(kpis.avgStudyHours + 'h');
+            $('#pass-rate').text(kpis.passRate + '%');
+            $('#top-grade-rate').text(kpis.topRate + '%');
+            
+            // 3. Render Stacked Bar Charts
+            
+            // Chart 1: Study Hours
+            const studyLabels = Object.keys(AGGREGATION.studyHours);
+            const studyDatasets = createStackedDatasets('studyHours', studyLabels);
+            new Chart(document.getElementById('studyHoursChart').getContext('2d'), {
+                type: 'bar',
+                data: { labels: studyLabels, datasets: studyDatasets },
+                options: {
+                    responsive: true, maintainAspectRatio: false,
+                    scales: { x: { stacked: true }, y: { stacked: true, beginAtZero: true } },
+                    plugins: { title: { display: false }, legend: { position: 'bottom' } }
+                }
+            });
+
+            // Chart 2: Scholarship Status
+            const scholarshipLabels = Object.keys(AGGREGATION.scholarship);
+            const scholarshipDatasets = createStackedDatasets('scholarship', scholarshipLabels);
+            new Chart(document.getElementById('scholarshipChart').getContext('2d'), {
+                type: 'bar',
+                data: { labels: scholarshipLabels, datasets: scholarshipDatasets },
+                options: {
+                    responsive: true, maintainAspectRatio: false,
+                    scales: { x: { stacked: true }, y: { stacked: true, beginAtZero: true } },
+                    plugins: { title: { display: false }, legend: { position: 'bottom' } }
+                }
+            });
+            
+            // Chart 3: Sex
+            const sexLabels = Object.keys(AGGREGATION.sex).filter(key => 
+                Object.values(AGGREGATION.sex[key]).some(count => count > 0)
+            );
+            const sexDatasets = createStackedDatasets('sex', sexLabels);
+            new Chart(document.getElementById('sexChart').getContext('2d'), {
+                type: 'bar',
+                data: { labels: sexLabels, datasets: sexDatasets },
+                options: {
+                    responsive: true, maintainAspectRatio: false,
+                    scales: { x: { stacked: true }, y: { stacked: true, beginAtZero: true } },
+                    plugins: { title: { display: false }, legend: { position: 'bottom' } }
+                }
+            });
+
+            // Chart 4: Behavioral Factors
+            const factorLabels = Object.keys(AGGREGATION.behavior);
+            const behaviorDatasets = [
+                { label: 'Grade A', data: factorLabels.map(label => AGGREGATION.behavior[label]['A']), backgroundColor: CHART_COLORS['A'], borderWidth: 1 },
+                { label: 'Grade B', data: factorLabels.map(label => AGGREGATION.behavior[label]['B']), backgroundColor: CHART_COLORS['B'], borderWidth: 1 }
+            ];
+            new Chart(document.getElementById('behaviorChart').getContext('2d'), {
+                type: 'bar',
+                data: { labels: factorLabels, datasets: behaviorDatasets },
+                options: {
+                    responsive: true, maintainAspectRatio: false,
+                    scales: { x: { title: { display: true, text: 'Factor' } }, y: { beginAtZero: true } },
+                    plugins: { title: { display: false }, legend: { position: 'bottom' } }
+                }
+            });
+            
+            // 4. Render Additional Analysis
+            renderGradeDistributionLineChart();
+            renderGradeSummaryTable();
+        }
+
+        // Start fetching data when the document is ready
+        $(document).ready(function() {
+            fetchDataBatch(0);
+        });
+
+    </script>
+{% endblock %}

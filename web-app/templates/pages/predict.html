@@ -1,0 +1,327 @@
+{% extends "base.html" %}
+
+{% block title %}Predict Student Grade | Student Data Entry{% endblock %}
+
+{% block content %}
+
+<div class="row g-2">
+    <div class="col-12">
+        <div class="card p-2 shadow-sm">
+            <h5 class="h5 fw-bold text-dark d-flex align-items-center justify-content-between collapsed"
+                data-bs-toggle="collapse" 
+                data-bs-target="#collapseFeatures" 
+                aria-expanded="false" 
+                aria-controls="collapseFeatures"
+                style="cursor: pointer;">
+                <span class="d-flex align-items-center">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="me-2 text-primary"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"></path></svg>
+                    Top Feature Influencers
+                </span>
+                <svg id="feature-collapse-icon" class="bi bi-chevron-up text-muted ms-2 transition" width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
+                    <path fill-rule="evenodd" d="M7.646 4.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1-.708.708L8 5.707l-5.646 5.647a.5.5 0 0 1-.708-.708l6-6z"/>
+                </svg>
+            </h5>
+            
+            <div class="collapse" id="collapseFeatures">
+                <ul class="list-unstyled pt-1">
+                    {% for feature in importance %}
+                    <li class="d-flex align-items-center mb-3">
+                        <span class="fs-6 fw-bolder text-primary me-2" style="width: 25px;">{{ loop.index }}.</span>
+                        <div class="flex-grow-1">
+                            <p class="text-sm fw-semibold text-dark mb-1">{{ feature.feature | replace('onehot__', '') | replace('_', ' ') | title }}</p>
+                            <div class="progress" style="height: 8px;">
+                                <div class="progress-bar bg-primary" role="progressbar" 
+                                    style="width: {{ feature.importance | float * 100 }}%;" 
+                                    aria-valuenow="{{ feature.importance | float * 100 }}" 
+                                    aria-valuemin="0" aria-valuemax="100"></div>
+                            </div>
+                        </div>
+                    </li>
+                    {% endfor %}
+                    {% if not importance %}
+                        <li class="text-sm text-muted fst-italic">Feature importance data is currently unavailable.</li>
+                    {% endif %}
+                </ul>
+            </div>
+            
+            <style>
+                .transition {
+                    transition: transform 0.3s ease-in-out;
+                }
+                .collapsed #feature-collapse-icon {
+                    transform: rotate(180deg);
+                }
+            </style>
+        </div>
+    </div>
+    <div class="col-12 col-lg-8">
+        <div class="card p-3 px-4 shadow-lg h-100">
+            
+            <form id="prediction-form" class="needs-validation" novalidate>
+                <div class="row g-3"> 
+                    
+                    <div class="col-12">
+                        <strong class="text-primary border-bottom border-primary border-opacity-50 pb-1 d-block">Personal & School Details</strong>
+                    </div>
+
+                    <div class="col-6 col-md-4">
+                        <label for="Student_Age" class="form-label text-muted">Student Age (18-24)</label>
+                        <input type="number" name="Student_Age" id="Student_Age" required min="18" max="24" value="20"
+                            class="form-control rounded-1 shadow-sm transition">
+                    </div>
+                    
+                    <div class="col-6 col-md-4">
+                        <label for="Sex" class="form-label text-muted">Sex</label>
+                        <select name="Sex" id="Sex" required 
+                            class="form-select rounded-1 shadow-sm transition">
+                            <option value="Male">Male</option>
+                            <option value="Female">Female</option>
+                        </select>
+                    </div>
+
+                    <div class="col-6 col-md-4">
+                        <label for="High_School_Type" class="form-label text-muted">High School Type</label>
+                        <select name="High_School_Type" id="High_School_Type" required
+                            class="form-select rounded-1 shadow-sm transition">
+                            <option value="State">State</option>
+                            <option value="Private">Private</option>
+                            <option value="Other">Other</option>
+                        </select>
+                    </div>
+
+                    <div class="col-6 col-md-4">
+                        <label for="Scholarship" class="form-label text-muted">Scholarship Percentage</label>
+                        <select name="Scholarship" id="Scholarship" required
+                            class="form-select rounded-1 shadow-sm transition">
+                            <option value="0">0%</option>
+                            <option value="25">25%</option>
+                            <option value="50">50%</option>
+                            <option value="75">75%</option>
+                            <option value="100">100%</option>
+                        </select>
+                    </div>
+
+                    <div class="col-6 col-md-4">
+                        <label for="Transportation" class="form-label text-muted">Daily Transportation</label>
+                        <select name="Transportation" id="Transportation" required
+                            class="form-select rounded-1 shadow-sm transition">
+                            <option value="Private">Private</option>
+                            <option value="Bus">Bus</option>
+                            <option value="Other">Other</option>
+                        </select>
+                    </div>
+                    
+                    <div class="col-12 mt-4">
+                        <strong class="text-primary border-bottom border-primary border-opacity-50 pb-1 d-block">Commitment & Study Habits</strong>
+                    </div>
+                    
+                    <div class="col-6 col-md-4">
+                        <label for="Weekly_Study_Hours" class="form-label text-muted">Weekly Study Hours (0-10)</label>
+                        <input type="number" name="Weekly_Study_Hours" id="Weekly_Study_Hours" required min="0" max="10" value="5"
+                            class="form-control rounded-1 shadow-sm transition">
+                    </div>
+
+                    <div class="col-6 col-md-4">
+                        <label for="Attendance" class="form-label text-muted">Class Attendance</label>
+                        <select name="Attendance" id="Attendance" required
+                            class="form-select rounded-1 shadow-sm transition">
+                            <option value="Always">Always</option>
+                            <option value="Sometimes">Sometimes</option>
+                            <option value="Never">Never</option>
+                        </select>
+                    </div>
+
+                    <div class="col-6 col-md-4">
+                        <label for="Project_work" class="form-label text-muted">Project Work Status</label>
+                        <select name="Project_work" id="Project_work" required
+                            class="form-select rounded-1 shadow-sm transition">
+                            <option value="Yes">Yes</option>
+                            <option value="No">No</option>
+                        </select>
+                    </div>
+
+                    <div class="col-6 col-md-4">
+                        <label for="Additional_Work" class="form-label text-muted">Does Student have Additional Work?</label>
+                        <select name="Additional_Work" id="Additional_Work" required
+                            class="form-select rounded-1 shadow-sm transition">
+                            <option value="Yes">Yes</option>
+                            <option value="No">No</option>
+                        </select>
+                    </div>
+                    
+                    <div class="col-6 col-md-4">
+                        <label for="Sports_activity" class="form-label text-muted">Involved in Sports Activity?</label>
+                        <select name="Sports_activity" id="Sports_activity" required
+                            class="form-select rounded-1 shadow-sm transition">
+                            <option value="Yes">Yes</option>
+                            <option value="No">No</option>
+                        </select>
+                    </div>
+
+                    <div class="col-12 mt-4">
+                        <strong class="text-primary border-bottom border-primary border-opacity-50 d-block">Learning Methods</strong>
+                    </div>
+
+                    <div class="col-6 col-md-4">
+                        <label for="Reading" class="form-label text-muted">Takes Time for Reading?</label>
+                        <select name="Reading" id="Reading" required
+                            class="form-select rounded-1 shadow-sm transition">
+                            <option value="Yes">Yes</option>
+                            <option value="No">No</option>
+                        </select>
+                    </div>
+
+                    <div class="col-6 col-md-4">
+                        <label for="Notes" class="form-label text-muted">Takes Notes in Class?</label>
+                        <select name="Notes" id="Notes" required
+                            class="form-select rounded-1 shadow-sm transition">
+                            <option value="Yes">Yes</option>
+                            <option value="No">No</option>
+                        </select>
+                    </div>
+
+                    <div class="col-6 col-md-4">
+                        <label for="Listening_in_Class" class="form-label text-muted">Actively Listens in Class?</label>
+                        <select name="Listening_in_Class" id="Listening_in_Class" required
+                            class="form-select rounded-1 shadow-sm transition">
+                            <option value="Yes">Yes</option>
+                            <option value="No">No</option>
+                        </select>
+                    </div>
+                    <div class="col-6 col-md-4"></div> 
+                </div>
+
+                <div class="col-12 mt-5">
+                    <button type="submit" id="submit-button"
+                        class="btn btn-primary btn-lg w-100 shadow-lg fw-semibold transition duration-300 ease-in-out">
+                        Get Grade Prediction
+                    </button>
+                    <div id="loading-indicator" class="d-none text-center mt-3 text-primary fw-medium">Predicting Grade...</div>
+                </div>
+            </form>
+            
+        </div>
+    </div>
+
+    <div class="col-12 col-lg-4">
+        <div class="d-grid gap-2">
+            
+            <div id="results" class="card p-4 shadow-lg d-none">
+                <h4 class="h4 fw-bold text-primary mb-4 border-bottom pb-2">Prediction Result</h4>
+
+                <div id="grade-display" class="mb-4 p-4 rounded-4 border bg-grade-default transition duration-300">
+                    <p class="fs-6 fw-medium text-dark d-flex align-items-center justify-content-between mb-2">
+                        Predicted Grade: 
+                        <span id="predicted-grade" class="fw-bolder fs-1 text-primary"></span>
+                    </p>
+                    <p class="text-sm text-muted">
+                        Confidence: 
+                        <span id="confidence" class="fw-semibold text-dark"></span>
+                    </p>
+                </div>
+                
+                <div id="recommendation-display" class="p-3 rounded-3 bg-warning-subtle border border-warning text-dark-emphasis mb-4">
+                    <p class="fw-bold mb-1 d-flex align-items-center">🎯 Personalized Recommendation:</p>
+                    <p id="recommendation" class="text-sm"></p>
+                </div>
+
+                <div id="error-message" class="d-none p-3 rounded-3 bg-danger-subtle border border-danger text-danger fw-medium" role="alert"></div>
+            </div>
+
+            <div class="card p-4 bg-success-subtle border border-success border-opacity-25 shadow-sm">
+                <h5 class="h5 fw-bold text-success mb-3 d-flex align-items-center">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="me-2"><line x1="12" y1="20" x2="12" y2="10"></line><line x1="18" y1="20" x2="18" y2="4"></line><line x1="6" y1="20" x2="6" y2="16"></line></svg>
+                    Model Performance
+                </h5>
+                <div class="d-flex justify-content-between align-items-center py-2 border-top border-success border-opacity-50 pt-3">
+                    <p class="text-dark-emphasis fw-medium mb-0">Validation Accuracy:</p>
+                    <p class="fs-3 fw-bolder text-success mb-0">{{ accuracy }}</p>
+                </div>
+                <p class="text-xs text-muted mt-2 mb-0">Accuracy is based on the model's performance on a validation dataset.</p>
+            </div>            
+        </div>
+    </div>
+</div>
+
+<script>
+    document.getElementById('prediction-form').addEventListener('submit', async function(e) {
+        e.preventDefault();
+        
+        const form = e.target;
+        const formData = new FormData(form);
+        
+        // DOM Elements
+        const submitButton = form.querySelector('#submit-button');
+        const loadingIndicator = document.getElementById('loading-indicator');
+        const resultsDiv = document.getElementById('results');
+        const errorDiv = document.getElementById('error-message');
+        const gradeDisplay = document.getElementById('grade-display');
+        const gradeSpan = document.getElementById('predicted-grade');
+
+        // Initial state update
+        const originalText = submitButton.textContent;
+        submitButton.textContent = 'Predicting...';
+        submitButton.disabled = true;
+        loadingIndicator.classList.remove('d-none');
+        resultsDiv.classList.add('d-none');
+        errorDiv.classList.add('d-none');
+
+        // Utility function to remove all dynamic color classes
+        function resetGradeDisplayClasses() {
+            gradeSpan.className = 'fw-bolder fs-1'; // Reset only dynamic classes, keep base classes
+            gradeDisplay.classList.remove('bg-grade-good', 'border-success', 'bg-grade-risk', 'border-danger', 'bg-grade-default', 'border-primary');
+            gradeSpan.classList.remove('text-primary', 'text-success', 'text-grade-risk');
+        }
+
+        try {
+            const response = await fetch('/predict', {
+                method: 'POST',
+                body: new URLSearchParams(formData), 
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded'
+                }
+            });
+
+            const data = await response.json();
+
+            if (response.ok) {
+                // Success: Display results
+                document.getElementById('predicted-grade').textContent = data.predicted_grade;
+                document.getElementById('confidence').textContent = data.confidence;
+                document.getElementById('recommendation').innerHTML = data.recommendation;
+                resultsDiv.classList.remove('d-none');
+                
+                resetGradeDisplayClasses();
+
+                // Update styling based on prediction (Green for A/B, Indigo otherwise, Red for E/Fail)
+                const grade = data.predicted_grade;
+
+                if (['A', 'B'].includes(grade)) {
+                    gradeDisplay.classList.add('bg-grade-good', 'border-success');
+                    gradeSpan.classList.add('text-success');
+                } else if (['E', 'Fail'].includes(grade)) {
+                    gradeDisplay.classList.add('bg-grade-risk', 'border-danger');
+                    gradeSpan.classList.add('text-grade-risk');
+                } else {
+                    // C, D, or other intermediate grades
+                    gradeDisplay.classList.add('bg-grade-default', 'border-primary');
+                    gradeSpan.classList.add('text-primary');
+                }
+
+            } else {
+                // Error: Display API error message
+                errorDiv.textContent = data.detail || data.error || 'An unknown error occurred during prediction.';
+                errorDiv.classList.remove('d-none');
+            }
+        } catch (e) {
+            errorDiv.textContent = 'Network or parsing error. Please check the server connection.';
+            errorDiv.classList.remove('d-none');
+        } finally {
+            // Restore button state
+            submitButton.textContent = originalText;
+            submitButton.disabled = false;
+            loadingIndicator.classList.add('d-none');
+        }
+    });
+</script>
+{% endblock %}
