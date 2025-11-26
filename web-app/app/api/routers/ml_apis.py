@@ -6,6 +6,7 @@ import pandas as pd
 import numpy as np 
 import os
 import sys
+from pathlib import Path
 
 router = APIRouter()
 
@@ -14,7 +15,11 @@ templates = Jinja2Templates(directory="templates")
 
 # Define the path to artifacts relative to the project root
 # NOTE: Ensure the directory structure (app/ml_artifacts) is correctly accessible from where FastAPI is run
-ARTIFACTS_PATH = os.path.join(os.path.dirname(__file__), '..', 'ml_artifacts')
+ANCHOR_DIR = Path(__file__).resolve().parent
+PROJECT_ROOT = ANCHOR_DIR.parent.parent
+ARTIFACTS_DIR = PROJECT_ROOT / 'ml_artifacts'
+
+# ARTIFACTS_PATH = os.path.join(os.path.dirname(__file__), '..', 'ml_artifacts')
 
 # Load ML components once at startup
 ML_PIPELINE = None
@@ -23,9 +28,13 @@ ML_IMPORTANCE = pd.DataFrame()
 
 try:
     # Adjust paths based on the expected location of the artifacts
-    pipeline_path = os.path.join(ARTIFACTS_PATH, '..\..\ml_artifacts\ml_model_pipeline.pkl')
-    metrics_path = os.path.join(ARTIFACTS_PATH, '..\..\ml_artifacts\ml_metrics.pkl')
-    importance_path = os.path.join(ARTIFACTS_PATH, '..\..\ml_artifacts\ml_feature_importance.pkl')
+    pipeline_path = ARTIFACTS_DIR / 'ml_model_pipeline.pkl'
+    metrics_path = ARTIFACTS_DIR / 'ml_metrics.pkl'
+    importance_path = ARTIFACTS_DIR / 'ml_feature_importance.pkl'
+    
+    # pipeline_path = os.path.join(ARTIFACTS_PATH, '..\..\ml_artifacts\ml_model_pipeline.pkl')
+    # metrics_path = os.path.join(ARTIFACTS_PATH, '..\..\ml_artifacts\ml_metrics.pkl')
+    # importance_path = os.path.join(ARTIFACTS_PATH, '..\..\ml_artifacts\ml_feature_importance.pkl')
     
     ML_PIPELINE = joblib.load(pipeline_path)
     ML_METRICS.update(joblib.load(metrics_path))
