@@ -58,12 +58,8 @@
                 <div class="card-header bg-white border-0">
                     <h6 class="mb-0 text-dark fw-bold">Data Entry Completeness</h6>
                 </div>
-                <div class="card-body">
-                     <canvas id="qualityPieChart" height="250"></canvas>
-                     
-
-[Image of Age Distribution Bar Chart]
-
+                <div class="card-body d-flex justify-content-center">
+                    <canvas id="qualityPieChart" height="300"></canvas>
                 </div>
             </div>
         </div>
@@ -73,8 +69,8 @@
                 <div class="card-header bg-white border-0">
                     <h6 class="mb-0 text-dark fw-bold">Student Age Group Distribution</h6>
                 </div>
-                <div class="card-body">
-                    <canvas id="ageDistributionChart" height="250"></canvas>
+                <div class="card-body d-flex justify-content-center">
+                    <canvas id="ageDistributionChart" height="300" width="600"></canvas>
                 </div>
             </div>
         </div>
@@ -128,20 +124,32 @@
 {% block scripts %}
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.3/dist/chart.umd.min.js"></script>
     <script>
+        // --- 1. Safely Extract Jinja Variables ---
+        // We use a simple assignment to clean JS variables to please the linter.
+        const totalRecords = {{ metrics.total_records | default(0) }};
+        const missingValues = {{ metrics.missing_values | default(0) }};
+
         // Only run chart rendering if there are records
-        if ({{ metrics.total_records }} > 0) {
+        if (totalRecords > 0) {
             
-            // Assuming 5 required fields were checked in the backend: Student_Age, Sex, Scholarship, Weekly_Study_Hours, Grade
-            const totalPossibleDataPoints = {{ metrics.total_records }} * 5; 
-            const totalFilled = totalPossibleDataPoints - {{ metrics.missing_values }};
-            const totalMissing = {{ metrics.missing_values }};
+            // Assuming ALL 14 fields from the provided schema are required.
+            const TOTAL_FIELDS = 14; 
+            
+            // --- 2. Perform Calculations with Clean JS Variables ---
+            // The linter now sees a standard JS multiplication.
+            const totalPossibleDataPoints = totalRecords * TOTAL_FIELDS; 
+            
+            const totalMissing = missingValues; 
+            // Calculate total filled data points
+            const totalFilled = totalPossibleDataPoints - totalMissing; 
 
             // --- Chart 1: Quality Completeness Pie Chart ---
             const qualityPieContext = document.getElementById('qualityPieChart').getContext('2d');
             const qualityData = {
                 labels: ['Data Filled', 'Data Missing'],
                 datasets: [{
-                    data: [totalFilled, totalMissing],
+                    // The chart data now uses the clean JS constants
+                    data: [totalFilled, totalMissing], 
                     // Professional Color Palette: Teal/Blue for good, soft Red for bad
                     backgroundColor: ['#20c997', '#dc3545'], // Success/Teal and Danger colors
                     hoverBackgroundColor: ['#17a673', '#c82333']
@@ -167,9 +175,10 @@
             const ageLabels = [];
             const ageCounts = [];
             
+            // --- 3. Jinja Loop for Chart Data ---
             {% for age, count in metrics.age_distribution %}
                 ageLabels.push('{{ age }}');
-                ageCounts.push({{ count }});
+                ageCounts.push({{ count | default(0) }});
             {% endfor %}
 
             const ageConfig = {

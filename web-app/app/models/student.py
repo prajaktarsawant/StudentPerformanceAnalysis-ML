@@ -6,12 +6,12 @@ class StudentData(Base):
 
     # Primary Key and Identifiers
     Student_ID = Column(Integer, primary_key=True, index=True, autoincrement=True)
-    Student_Age = Column(String, nullable=False) # Changed to String to hold '19-22'
+    Student_Age = Column(Integer, nullable=False) # Changed to String to hold '19-22'
 
     # Categorical Features (Most are Strings now)
     Sex = Column(String, nullable=False)        # e.g., 'Male', 'Female'
     High_School_Type = Column(String, nullable=False)
-    Scholarship = Column(String, nullable=False) # e.g., '50%', '100%'
+    Scholarship = Column(Integer, nullable=False) # e.g., '50', '100'
     Additional_Work = Column(String, default="No")
     Sports_activity = Column(String, default="No")
     Transportation = Column(String, nullable=False)

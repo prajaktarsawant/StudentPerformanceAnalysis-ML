@@ -7,8 +7,8 @@ from typing import Dict, Any
 def get_student(db: Session, student_id: int):
     return db.query(StudentModel).filter(StudentModel.Student_ID == student_id).first()
 
-def get_students(db: Session, skip: int = 0, limit: int = 100):
-    return db.query(StudentModel).offset(skip).limit(limit).all()
+def get_students(db: Session, limit: int = 100, offset: int = 0):
+    return db.query(StudentModel).offset(offset).limit(limit).all()
 
 def create_student_record(db: Session, record: StudentDataCreate):
     # We use .model_dump() to convert the Pydantic model to a dictionary for SQLAlchemy
@@ -42,7 +42,7 @@ def calculate_data_quality_metrics(db: Session) -> Dict[str, Any]:
     # 2. Data Completeness (Missing Values)
     
     # REQUIRED STRING FIELDS (Check for NULL OR Empty String)
-    REQUIRED_STRING_FIELDS = [
+    REQUIRED_STRING_FIELDS = [        
         StudentModel.Student_Age,
         StudentModel.Sex,
         StudentModel.Scholarship,
@@ -59,7 +59,7 @@ def calculate_data_quality_metrics(db: Session) -> Dict[str, Any]:
     # Check String Fields
     for field in REQUIRED_STRING_FIELDS:
         missing_count = db.query(StudentModel).filter(
-            (field == None) | (field == '') 
+            (field == None) 
         ).count()
         missing_values_count += missing_count
         

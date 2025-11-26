@@ -5,10 +5,10 @@ from typing import Optional
 class StudentDataCreate(BaseModel):
     # Student_ID is typically auto-generated, but kept as required for CSV matching
     # Student_ID: Optional[int] = Field(..., description="Unique ID for the student.") 
-    Student_Age: str
+    Student_Age: int
     Sex: str # 'Male', 'Female', 'Other'
     High_School_Type: str
-    Scholarship: str # '50%', '100%', 'No'
+    Scholarship: int # '50%', '100%', 'No'
     Additional_Work: str # 'Yes', 'No'
     Sports_activity: str # 'Yes', 'No'
     Transportation: str # 'Private', 'Bus'

@@ -81,8 +81,8 @@
                             <td>{{ student.High_School_Type }}</td>
                             
                             <td>
-                                {% set scholarship_status = student.Scholarship.lower() %}
-                                <span class="badge {% if 'yes' in scholarship_status or '50%' in scholarship_status or '100%' in scholarship_status %}bg-success{% else %}bg-secondary{% endif %}">
+                                {% set scholarship_status = student.Scholarship%}
+                                <span class="badge bg-success">
                                     {{ student.Scholarship }}
                                 </span>
                             </td>

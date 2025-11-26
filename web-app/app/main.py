@@ -23,5 +23,6 @@ from .api.routers import ui
 
 app.include_router(ui.router)
 # If you add API endpoints, include them like this:
-from .api.routers import item
+from .api.routers import item, student
+app.include_router(student.router, prefix="/api/v1")
 app.include_router(item.router, prefix="/api/v1", tags=["items"])
